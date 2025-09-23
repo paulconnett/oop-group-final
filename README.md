@@ -5,9 +5,9 @@
 | **Course**          | CSCI 375 - OOP & Design Patterns                   |
 | **Section**         | 1                                                  |
 | **Semester**        | Fall 2025                                          |
-| **Students**        | Paul Connett | Parker Stacy                        |
-| **Mav Usernames**   | pjconnett | pcstacy                                |
-| **GitHub Usernames**| paulconnett | parkerStacy19                        |
+| **Students**        | Paul Connett  Parker Stacy                        |
+| **Mav Usernames**   | pjconnett  pcstacy                                |
+| **GitHub Usernames**| paulconnett  parkerStacy19                        |
 | **Repository**      | https://github.com/paulconnett/oop-group-final     |
 
 

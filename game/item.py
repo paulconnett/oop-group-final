@@ -41,4 +41,3 @@ class PotionStrength(Potion):
 
     def use(self, target):
         pass
-

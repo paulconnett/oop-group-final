@@ -7,5 +7,7 @@ class Mob:
         self.is_dead = False
 
     def attack(self, target: "Mob") -> None:
+        pass
 
     def die(self) -> None:
+        pass

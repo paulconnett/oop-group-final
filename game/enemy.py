@@ -7,3 +7,4 @@ class Enemy(Mob):
         self.rank = rank
 
     def give_money(self) -> int:
+        pass

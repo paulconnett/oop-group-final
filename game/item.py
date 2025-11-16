@@ -31,6 +31,7 @@ class PotionHP(Potion):
         self.heal_value = heal_value
 
     def use(self, target):
+        pass
 
 
 class PotionStrength(Potion):
@@ -39,4 +40,5 @@ class PotionStrength(Potion):
         self.buff = buff
 
     def use(self, target):
+        pass
 

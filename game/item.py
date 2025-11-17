@@ -1,43 +1,68 @@
+from __future__ import annotations
+import abc
+
+from mob import Mob
+
+
 class Item:
-    def __init__(self, name: str, value: int):
-        self.name = name
-        self.value = value
+    """
+    Base class for items
+    """
+    def __init__(self, name: str, value: int) -> None:
+        self.name: str = name
+        self.value: int = value
 
 
 class Weapon(Item):
-    def __init__(self, name: str, value: int, attack_value: int):
+    """
+    Weapon item that increases player's attack
+    """
+    def __init__(self, name: str, value: int, attack: int) -> None:
         super().__init__(name, value)
-        self.attack_value = attack_value
+        self.attack: int = attack
 
 
 class Armor(Item):
-    def __init__(self, name: str, value: int, defense: int):
+    """
+    Armor item that increases player's defense
+    """
+    def __init__(self, name: str, value: int, defense: int) -> None:
         super().__init__(name, value)
-        self.defense = defense
+        self.defense: int = defense
 
 
-class Potion(Item):
-    def __init__(self, name: str, value: int, potion_type: str):
-        super().__init__(name, value)
-        self.potion_type = potion_type
+class Potion(Item, abc.ABC):
+    """
+    Abstract base class for all potions.
+    """
 
-    def use(self, target):
-        pass
+    @abc.abstractmethod
+    def use(self, entity: Mob) -> None:
+        """
+        Abstract method for using potions
+        """
+        ...
 
 
 class PotionHP(Potion):
-    def __init__(self, name: str, value: int, heal_value: int):
-        super().__init__(name, value, potion_type="HP")
-        self.heal_value = heal_value
+    """
+    Healing potion
+    """
+    def __init__(self, name: str, value: int, heal_value: int = 100) -> None:
+        super().__init__(name, value)
+        self.heal_value: int = heal_value
 
-    def use(self, target):
-        pass
+    def use(self, entity: Mob) -> None:
+        entity.heal(self.heal_value)
 
 
 class PotionStrength(Potion):
-    def __init__(self, name: str, value: int, buff: int):
-        super().__init__(name, value, potion_type="Strength")
-        self.buff = buff
+    """
+    Strength potion
+    """
 
-    def use(self, target):
-        pass
+    def __init__(self, name: str, value: int) -> None:
+        super().__init__(name, value)
+
+    def use(self, entity: Mob) -> None:
+        entity.strength_buff = True

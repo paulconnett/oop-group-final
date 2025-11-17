@@ -1,9 +1,24 @@
+from __future__ import annotations
 from mob import Mob
 
-class Enemy(Mob):
-    def __init__(self, name: str, hp: int, attack_value: int, defense: int, reward: int, rank: int):
-        super().__init__(name, hp, attack_value, defense)
-        self.reward = reward
-        self.rank = rank
 
-    def give_money(self) -> int:
+class Enemy(Mob):
+    """
+    Enemy class
+    """
+
+    def __init__(
+        self,
+        name: str,
+        hp: int,
+        attack: int,
+        defense: int,
+        reward: int
+    ) -> None:
+        super().__init__(name, hp, attack, defense)
+        self.reward: int = reward
+
+    def give_reward(self) -> int:
+        """Return reward money
+        """
+        return self.reward

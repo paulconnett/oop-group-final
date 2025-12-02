@@ -4,26 +4,39 @@ Room class
 
 __author__ = 'Parker Stacy'
 
-import random
+import os
+import sys
+import copy
 from abc import ABC, abstractmethod
 from typing import List
 from item import Item, Weapon, Armor, Potion, PotionHP, PotionStrength
 from enemy import Enemy
 from player import Player
+from monster import MonsterList
 
 
 class Room(ABC):
     '''
-    Room class
+    Abstract base Room class
     '''
-    def __init__(self, level: int, player: Player):
+    def __init__(self, level: int, player: Player) -> None:
+        '''
+        constructor
+
+        args:
+            level: int - game level the room will be for
+            player: Player - current player object
+        '''
         self._level = level
         self._player = player
 
     @abstractmethod
-    def play_room(self, player: Player):
+    def play_room(self, player: Player) -> None:
         '''
         runs room logic (visit shop/fight monster)
+
+        args:
+            player: Player - current player object
         '''
 
     @abstractmethod
@@ -35,7 +48,7 @@ class Room(ABC):
     @property
     def level(self) -> int:
         '''
-        getter for private attribute
+        getter for private level attribute
         '''
         return self._level
 
@@ -44,62 +57,101 @@ class Shop(Room):
     '''
     shop class
     '''
+    # Could improve on shop system
     TEMP_SHOP: List[Item] = []
 
-    TEMP_SHOP.append(Weapon("Sword", 5, 10))
-    TEMP_SHOP.append(Armor("Steel Plate", 10, 20))
-    TEMP_SHOP.append(PotionHP("Healing Potion", 5))
-    TEMP_SHOP.append(PotionStrength("Strength Potion", 5))
+    TEMP_SHOP.append(Weapon("Steel Sword", 5, attack=20))
+    TEMP_SHOP.append(Weapon("Mythril Sword", 50, attack=50))
+    TEMP_SHOP.append(Weapon("Bork's Sword", 1, attack=0))
+    TEMP_SHOP.append(Armor("Steel Plate", 10, defense=10))
+    TEMP_SHOP.append(Armor("Mythril Plate", 50, defense=25))
+    TEMP_SHOP.append(PotionHP("Healing Potion", 25))
+    TEMP_SHOP.append(PotionStrength("Strength Potion", 10))
+    TEMP_SHOP.append(Weapon("God Sword", 0, attack=10000000))
 
     def __init__(self, level: int, player: Player):
         '''
         constructor
+
+        args:
+            level: int - game level this shop is for
+            player: Player - current player object
         '''
         super().__init__(level, player)
         self._items: List[Item] = Shop.TEMP_SHOP
 
     def play_room(self, player: Player) -> None:
         '''
-        player enters shop
+        player enters shop and can choose to buy items
+
+        args:
+            player: Player - current player object
         '''
-        input(f"\nWelcome to Bork's Level {self.level} shop! (Press Enter to continue...)")
+        os.system('clear')
+
+        print("Welcome to Bork's $hop! It's totally not a scam!")
         print(self)
 
-        print(f"You have {player.money} c")
-        user_in = input("Bork: Can I interest you in my wares? (y/n)")
+        print(f"You have {player.money}c")
+        user_in = input("\nBork: Can I interest you in my wares? (y/n) ")
 
         if user_in == ('n' or 'N'):
             input("Bork: See you next time... I hope...    (Press Enter)")
             return
         if user_in == ('y' or 'Y'):
             self.buy_items(self._items)
+        else:
+            input("Invalid option!  (Press enter...) ")
+            self.play_room(player)
 
     def buy_items(self, items: List[Item]) -> None:
         '''
         player buys items from shop
-        '''
-        item = input("\nWhat's catching your eye? (Enter item number...)")
-        item = int(item) - 1
 
-        choice = items[item]  # FIXME check for out of bounds index
+        args:
+            items: List[Item] - item list containing shop inventory
+        '''
+        item = input("\nBork: What's catching your eye? (Enter item number...) ")
+
+        try:
+            item = int(item) - 1
+            choice = items[item]
+        except (IndexError, ValueError):
+            input("Invalid option!  (Press enter...)")
+            self.buy_items(items)
+
         if self._player.spend_money(choice.value):
             if isinstance(choice, Weapon):
                 self._player.equip_weapon(choice)
+                items.remove(choice)
             if isinstance(choice, Armor):
                 self._player.equip_armor(choice)
+                items.remove(choice)
             if isinstance(choice, Potion):
-                self._player.inventory.append(choice)
+                new_potion = copy.copy(choice)  # Make a copy to allow multiple of same potion
+                self._player.inventory.append(new_potion)
 
-            print(f"{self._player.name} bought a {choice.name}!")
-            print(f"New balance: {self._player.money}c")
-            input("Bork: See ya, sucker!   (Press enter...)")
+            os.system('clear')
+            print(f"{self._player.name} bought a {choice.name}!\n")
+            print(self)
+            print(f"New balance: {self._player.money}c\n")
+            user_in = input("Bork: Anything else? (y/n) ")
+            if user_in == ('y' or 'Y'):
+                os.system('clear')
+                print(self)
+                self.buy_items(items)
+            else:
+                input("\nBork: See ya, sucker!   (Press enter...)")
         else:
-            input("You can't afford that! Don't waste my time!  (Press enter...)")
-            self.buy_items(items)
+            input("\nBork: You can't afford that! Don't waste my time!\n"
+                  f"{self._player.name} is escorted out by a gang of rat spiders  (Press enter...)")
 
     def __str__(self) -> str:
         '''
         prints shop inventory in readable format
+
+        return:
+            str - string containing formatted shop inventory
         '''
         rtn = ''
         for item in self._items:
@@ -112,73 +164,111 @@ class Dungeon(Room):
     '''
     dungeon class
     '''
-    temp_e: List[Enemy] = []
-    c_temp_e: Enemy
-
-    temp_e.append(Enemy("Goblin", 15, 5, 0, 5))
-    # temp_e.append(Enemy("Ogre", 50, 15, 10, 100))
-    # temp_e.append(Enemy("Dragon", 100, 25, 10, 250))
-
-    def __init__(self, level: int, player: Player):
+    def __init__(self, level: int, player: Player, monster_list: MonsterList) -> None:
         '''
         constructor
+
+        args:
+            level: int - game level this dungeon will be for
+            player: Player - current player object
+            monster_list: MonsterList - list of monsters to choose from
         '''
         super().__init__(level, player)
-        self._enemies: List[Enemy] = Dungeon.temp_e
+        self._curr_enemy = monster_list.get_monster(level)
 
-    def play_room(self, player: Player):
+    def play_room(self, player: Player) -> None:
         '''
         player fights a monster
+
+        args:
+            player: Player - current player object
         '''
-        enemy_num: int = random.randint(0, len(self._enemies)-1)
-        Dungeon.c_temp_e = self._enemies[enemy_num]  # FIXME get monsters from monster.py file
+        monster = self._curr_enemy
 
-        print(f"\n{player.name} enters the level {self.level} dungeon...")
-        input(f"A {Dungeon.c_temp_e.name} has appeared! Time to throw hands!   (Press enter...)")
-        self.combat(player, self.c_temp_e)
+        os.system('clear')
+        print(f"{player.name} enters the level {self.level} dungeon...")
+        input(f"A {monster.name} has appeared! Time to throw hands!   (Press enter...)")
+        os.system('clear')
+        self.combat(player, monster)
 
-    def combat(self, player: Player, enemy: Enemy):
+    def combat(self, player: Player, enemy: Enemy) -> None:
         '''
         combat engine
+
+        args:
+            player: Player - current player object
+            enemy: Enemy - current monster being fought
         '''
         while enemy.is_alive:
-            print(f"\n===== {player.name} - {player.hp} HP =====")
-            print(f"===== {enemy.name} - {enemy.hp} HP =====\n")
+            print(f"===== {player.name} - {player.hp} HP - {player.attack} ATK - "
+                  f"{player.defense} AMR =====")
+            print(f"===== {enemy.name} - {enemy.hp} HP - {enemy.attack} ATK - "
+                  f"{enemy.defense} AMR =====\n")
 
             options = ("Attack", "Use potion")
             for o in options:
                 print(f"{options.index(o) + 1} - {o}")
 
-            action = input(f"What will the brave {player.name} do?")
+            action = input(f"\nWhat will the brave {player.name} do? (Enter action number...) ")
+            os.system('clear')
+
             if action == '1':
                 dmg = player.attack_entity(enemy)
-                print(f"\n{player.name} attacks for {dmg} damage!")
+                print(f"{player.name} attacks for {dmg} damage!")
 
             if action == '2':
-                if not player.inventory:
-                    print("No potions to use!")
-                    self.combat(player, enemy)
-
-                potions: List[Potion] = []
-                print("===== Iventory =====")
-                for item in player.inventory:
-                    if isinstance(item, Potion):
-                        potions.append(item)
-                        print(f"{potions.index(item) + 1} - {item.name}")
-
-                choice = input(f"Which item will {player.name} use?")
-                choice = int(choice) - 1
-
-                player.use_potion(potions[choice])
-                print(f"{player.name} used a {potions[choice].name}")
+                self.use_potion(player)
+                continue
 
             if enemy.is_alive:
                 dmg = enemy.attack_entity(player)
-                print(f"\nThe {enemy.name} attacks for {dmg} damage!")
+                input(f"\nThe {enemy.name} attacks for {dmg} damage!    (Press enter...)")
+                os.system('clear')
 
-        print(f"\n{enemy.name} has been defeated!")
+            if not player.is_alive:  # Need better game over but this will do for now
+                os.system('clear')
+                input("u ded")
+                sys.exit()
+
+        print(f"\nThe {enemy.name} has been defeated!")
         player.add_money(enemy.reward)
-        print(f"{player.name} gained {enemy.reward} c!")
+        input(f"{player.name} gained {enemy.reward}c!  (Press enter...)")
+
+    def use_potion(self, player: Player) -> None:
+        '''
+        player uses a potion from their inventory
+
+        args:
+            player: Player - current player object
+        '''
+        if not player.inventory:
+            input("No potions to use!   (Press enter...)")
+            return
+
+        potions: List[Potion] = []
+
+        print("===== Iventory =====")
+        for item in player.inventory:
+            if isinstance(item, Potion):
+                potions.append(item)
+
+        for item in potions:
+            print(f"{potions.index(item) + 1} - {item.name}")
+
+        choice = input(f"Which item will {player.name} use? (Enter item number...) ")
+
+        try:
+            choice = int(choice) - 1
+            player.use_potion(potions[choice])
+            os.system('clear')
+            print(f"{player.name} used a {potions[choice].name}")
+        except (IndexError, ValueError):
+            print("INVALID INPUT")
+            self.use_potion(player)
+        return
 
     def __str__(self) -> str:
+        '''
+        overload print method. Currently unused for Room type Dungeon
+        '''
         return ''

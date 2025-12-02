@@ -72,13 +72,13 @@ class Shop(Room):
             input("Bork: See you next time... I hope...    (Press Enter)")
             return
         if user_in == ('y' or 'Y'):
-            self.buy_items(self._items, player.inventory)
+            self.buy_items(self._items)
 
-    def buy_items(self, items: List[Item], inventory: List[Item]) -> None:
+    def buy_items(self, items: List[Item]) -> None:
         '''
         player buys items from shop
         '''
-        item = input("What's catching your eye? (Enter item number...)")
+        item = input("\nWhat's catching your eye? (Enter item number...)")
         item = int(item) - 1
 
         choice = items[item]  # FIXME check for out of bounds index
@@ -88,13 +88,14 @@ class Shop(Room):
             if isinstance(choice, Armor):
                 self._player.equip_armor(choice)
             if isinstance(choice, Potion):
-                inventory.append(choice)
+                self._player.inventory.append(choice)
 
-            print(f"You bought a {choice.name}!")
-            print(f"Current money: {self._player.money}")
-            input("Bork: See ya sucker!   (Press enter...)")
+            print(f"{self._player.name} bought a {choice.name}!")
+            print(f"New balance: {self._player.money}c")
+            input("Bork: See ya, sucker!   (Press enter...)")
         else:
-            input("You can't afford that!   (Press enter...)")
+            input("You can't afford that! Don't waste my time!  (Press enter...)")
+            self.buy_items(items)
 
     def __str__(self) -> str:
         '''

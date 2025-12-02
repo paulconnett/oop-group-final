@@ -19,8 +19,9 @@ class Game():
         '''
         constructor
         '''
+        player_name = input("Who dares enter the dungeon?   (Enter your name...)")
+        self._player: Player = Player(player_name)
         self._rooms: List[Room] = []
-        self._player: Player = Player("Player_Name")
 
         for i in range(Game.NUM_LEVELS):
             shop = Shop(i+1, self._player)

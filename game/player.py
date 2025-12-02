@@ -8,7 +8,7 @@ class Player(Mob):
     Player class
     """
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str = "Player") -> None:
         super().__init__(name, hp=100, attack=0, defense=0)
 
         self.max_hp: int = 100

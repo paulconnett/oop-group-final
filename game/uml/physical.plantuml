@@ -1,0 +1,11 @@
+@startuml Physical View
+title Deployment Diagram
+
+node "Player Computer" {
+  artifact "Game.py" {
+    component "Game Logic"
+    component "UI Logic"
+  }
+}
+
+@enduml

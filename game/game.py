@@ -20,7 +20,7 @@ class Game():
         constructor
         '''
         self._rooms: List[Room] = []
-        self._player: Player = Player("Player_Name")
+        self._player: Player = Player()
 
         for i in range(Game.NUM_LEVELS):
             shop = Shop(i+1, self._player)
@@ -57,4 +57,4 @@ class Game():
 
 
 if __name__ == '__main__':
-    Game.main()
+    Game.main() # pragma: no cover

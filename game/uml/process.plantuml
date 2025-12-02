@@ -2,21 +2,29 @@
 title Sequence Diagram
 
 actor Player
+
 participant Game
-participant Room_Stage
+participant Dungeon
 participant Enemy
-participant Room_Shop
+participant Shop
 
-Player -> Game : startGame()
+Player -> Game : main()/play_game()
 
-loop 10 Dungeon Levels
-    Game -> Room_Stage : generateRoom()
-    Room_Stage -> Enemy : Enemy appears
-    Player -> Enemy : attack()
-    Enemy -> Enemy : die()
-    Player <- Enemy : giveMoney()
-    Player -> Room_Shop : buyItem()
+loop [NUM_LEVELS]
+  Game -> Shop : play_room(player)
+  Shop -> Player : buy_items(items)
+
+  Game -> Dungeon : play_room(player)
+  Dungeon -> Enemy : choose random enemy
+
+  loop [while enemy is alive]
+    Dungeon -> Player : attack_entity(enemy)
+    Dungeon -> Enemy : attack_entity(player)
+  end
+
+  Dungeon -> Player : add_money(reward)
 end
 
-Game -> Player : Game Over
+Game -> Player : "Game Over!"
+
 @enduml

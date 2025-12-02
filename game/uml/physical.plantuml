@@ -2,9 +2,14 @@
 title Deployment Diagram
 
 node "Player Computer" {
-  artifact "Game.py" {
-    component "Game Logic"
-    component "UI Logic"
+  artifact "Game" {
+    file "game.py"
+    file "room.py"
+    file "player.py"
+    file "enemy.py"
+    file "mob.py"
+    file "item.py"
+    file "monster.py"
   }
 }
 

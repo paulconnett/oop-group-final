@@ -1,42 +1,30 @@
 @startuml Development View
 title Package Diagram
 
-left to right direction
-
-package "Characters" as CH {
-  class mob
+package "Characters" {
   class Player
+  class Mob
   class Enemy
 }
 
-package "Game Logic" as GL {
-  class Game
-  class Room
-  class Room_Stage
-  class Room_Shop
-}
-
-package "Items" as IT {
+package "Items" {
   class Item
   class Weapon
   class Armor
-  class Potion
-  class Potion_HP
-  class Potion_Strength
+  abstract class Potion
+  class PotionHP(Potion)
+  class PotionStrength(Potion)
 }
 
-GL --> CH
-note on link
-controls
-end note
+package "Game Logic" {
+  class Game
+  abstract class Room
+  class Shop(Room)
+  class Dungeon(Room)
+}
 
-GL --> IT
-note on link
-uses
-end note
+"Game Logic" --> Characters : controls
+"Game Logic" --> Items : uses
+Characters --> Items : uses
 
-CH --> IT
-note on link
-uses
-end note
 @enduml

@@ -2,87 +2,108 @@
 title Class Diagram
 
 class Game {
-  - currentRoom : Room
-  - currentLevel : int
-  + startGame() : void
-  + generateRoom() : Room
+  - _rooms : List<Room>
+  - _player : Player
+  + NUM_LEVELS : int
+  + play_game() : void
+  + player : Player
+  + main() : void
 }
 
-class Room {
-  - name : string
-  - type : int
+abstract class Room {
+  - _level : int
+  - _player : Player
+  + level : int
+  + play_room(player : Player) : void
+  + __str__() : str
 }
 
-class Room_Stage {
-  - level : int
-  - enemy : Enemy
-  - reward : int
+class Shop {
+  - _items : List<Item>
+  + play_room(player : Player) : void
+  + buy_items(items : List<Item>) : void
+  + __str__() : str
 }
 
-class Room_Shop {
-  - inventory : Item[]
-  + buyItem() : void
+class Dungeon {
+  - _enemies : List<Enemy>
+  + play_room(player : Player) : void
+  + combat(player : Player, enemy : Enemy) : void
+  + __str__() : str
 }
 
-class mob {
-  - name : string
-  - hp : int
-  - attackValue : int
-  - defense : int
-  - isDead : bool
-  + attack() : void
-  + die() : void
+Game --> Room
+Room <|-- Shop
+Room <|-- Dungeon
+
+abstract class Mob {
+  + name : str
+  + hp : int
+  + attack : int
+  + defense : int
+  + is_dead : bool
+  + attack_entity(target : Mob) : int
+  + take_damage(amount : int) : None
 }
 
 class Player {
-  - money : int
-  - inventory : Item[]
-  - weapon : Weapon
-  - armor : Armor
-  - potion : Potion
-  + usePotion() : void
-  + pickUpItem() : void
+  + max_hp : int
+  + money : int
+  + inventory : List<Item>
+  + weapon : Weapon
+  + armor : Armor
+  + strength_buff : bool
+  + attack_entity(target : Mob) : int
+  + heal(amount : int) : int
+  + use_potion(p : Potion) : void
+  + equip_weapon(w : Weapon) : void
+  + equip_armor(a : Armor) : void
+  + add_money(amount : int) : void
+  + spend_money(amount : int) : bool
 }
 
 class Enemy {
-  - reward : int
-  - rank : int
-  + giveMoney() : void
+  + reward : int
 }
 
+Mob <|-- Player
+Mob <|-- Enemy
+
+Player --> Item
+
+Dungeon --> Enemy
+
 class Item {
-  - name : string
-  - value : int
+  + name : str
+  + value : int
 }
 
 class Weapon {
-  - attackValue : int
+  + attack : int
 }
 
 class Armor {
-  - defense : int
+  + defense : int
 }
 
-class Potion {
-  - type : string
+abstract class Potion {
+  + use(entity : Mob) : void
 }
 
-class Potion_HP {
-  - healValue : int
+class PotionHP {
+  + heal_value : int
+  + use(entity : Mob) : void
 }
 
-class Potion_Strength {
-  - buff : int
+class PotionStrength {
+  + use(entity : Mob) : void
 }
 
-Room <|-- Room_Stage
-Room <|-- Room_Shop
-mob <|-- Player
-mob <|-- Enemy
-Player --> Item
 Item <|-- Weapon
 Item <|-- Armor
 Item <|-- Potion
-Potion <|-- Potion_HP
-Potion <|-- Potion_Strength
+
+Potion <|-- PotionHP
+Potion <|-- PotionStrength
+
 @enduml

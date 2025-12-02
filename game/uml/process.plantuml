@@ -1,0 +1,22 @@
+@startuml Process View
+title Sequence Diagram
+
+actor Player
+participant Game
+participant Room_Stage
+participant Enemy
+participant Room_Shop
+
+Player -> Game : startGame()
+
+loop 10 Dungeon Levels
+    Game -> Room_Stage : generateRoom()
+    Room_Stage -> Enemy : Enemy appears
+    Player -> Enemy : attack()
+    Enemy -> Enemy : die()
+    Player <- Enemy : giveMoney()
+    Player -> Room_Shop : buyItem()
+end
+
+Game -> Player : Game Over
+@enduml

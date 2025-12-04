@@ -1,6 +1,7 @@
 from enemy import Enemy
 
-def monsters():
+
+def monsters() -> list[Enemy]:
     """10 monsters. One for each level
     """
     return [

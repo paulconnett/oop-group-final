@@ -15,6 +15,7 @@ class TestShop(unittest.TestCase):
     """
     Unittest shop class
     """
+
     def setUp(self) -> None:
         self.player = Player()
         self.shop = Shop(level=1, player=self.player)
@@ -68,6 +69,7 @@ class TestDungeon(unittest.TestCase):
     """
     Unittesting Dungeon class
     """
+
     def setUp(self) -> None:
         self.player = Player("Tester")
         self.dungeon = Dungeon(level=1, player=self.player)

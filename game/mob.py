@@ -13,6 +13,7 @@ class Mob:
         self.hp: int = hp
         self.attack: int = attack
         self.defense: int = defense
+        self.strength_buff = 0
         self.is_dead: bool = False
 
     def attack_entity(self, entity: "Mob") -> int:

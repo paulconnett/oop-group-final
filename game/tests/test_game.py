@@ -6,12 +6,8 @@ __author__ = "Paul Connett"
 
 import unittest
 from unittest.mock import patch, MagicMock
-from io import StringIO
-import sys
 
 from game import Game
-from room import Room, Shop, Dungeon
-from player import Player
 
 
 class TestGame(unittest.TestCase):

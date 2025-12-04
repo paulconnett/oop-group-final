@@ -40,17 +40,11 @@ class Player(Mob):
         entity.take_damage(damage)
         return damage
 
-    def heal(self, amount: int) -> int:
+    def heal(self, amount: int) -> None:
         """
         Heals player
-        Returns healed amount for UI
         """
-        if amount <= 0:
-            return 0
-
-        before: int = self.hp
         self.hp = min(self.max_hp, self.hp + amount)
-        return self.hp - before
 
     def use_potion(self, potion: Potion) -> None:
         """Use a potion from the player's inventory
@@ -90,7 +84,7 @@ class Player(Mob):
         if self.money >= amount:
             self.money -= amount
             return True
-        
+
         return False
 
     def _give_starting_equipment(self) -> None:

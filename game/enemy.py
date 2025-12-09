@@ -1,4 +1,11 @@
+"""
+Enemy class
+"""
+
 from __future__ import annotations
+
+__author__ = "Paul Connett"
+
 from mob import Mob
 
 

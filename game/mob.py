@@ -1,4 +1,10 @@
+"""
+Base class mobs
+"""
+
 from __future__ import annotations
+
+__author__ = "Paul Connett"
 
 
 class Mob:

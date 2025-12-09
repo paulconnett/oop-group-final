@@ -1,4 +1,11 @@
+"""
+Base class for items
+"""
+
 from __future__ import annotations
+
+__author__ = "Paul Connett"
+
 import abc
 
 from mob import Mob

@@ -62,12 +62,12 @@ class Shop(Room):
 
     TEMP_SHOP.append(Weapon("Steel Sword", 5, attack=20))
     TEMP_SHOP.append(Weapon("Mythril Sword", 50, attack=50))
-    TEMP_SHOP.append(Weapon("Bork's Sword", 1, attack=0))
+    # TEMP_SHOP.append(Weapon("Bork's Sword", 1, attack=0))
     TEMP_SHOP.append(Armor("Steel Plate", 10, defense=10))
     TEMP_SHOP.append(Armor("Mythril Plate", 50, defense=25))
     TEMP_SHOP.append(PotionHP("Healing Potion", 25))
     TEMP_SHOP.append(PotionStrength("Strength Potion", 10))
-    TEMP_SHOP.append(Weapon("God Sword", 0, attack=10000000))
+    # TEMP_SHOP.append(Weapon("God Sword", 0, attack=10000000))
 
     def __init__(self, level: int, player: Player):
         '''

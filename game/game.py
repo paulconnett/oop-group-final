@@ -70,4 +70,4 @@ class Game():
 
 
 if __name__ == '__main__':
-    Game.main()
+    Game.main() # pragma: no cover

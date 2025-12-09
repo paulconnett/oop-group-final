@@ -1,82 +1,35 @@
-PLANTUML = java -jar ~/plantuml.jar
-UMLEXT = plantuml
-UMLDIR = ./uml
-UMLFILES = $(wildcard $(UMLDIR)/*.$(UMLEXT))
-DOCS = docs
-
-all: check-style check_types run-test run-test-coverage create-docs create-uml clean
-	@echo "Make all done...!"
+TEST = pytest
+TEST_ARGS = -s --verbose --color=yes
+TYPE_CHECK = mypy --strict --allow-untyped-decorators --ignore-missing-imports
+STYLE_CHECK = flake8
+COVERAGE = python -m pytest
+DEMO = './game'
 
 .PHONY: all
-all: check-style fix-style check-types run-test run-test-coverage create-docs create-uml clean
-	@echo "All done!"
+all: check-style check-type run-test run-test-coverage clean
+	@echo "All checks passed!"
+
+.PHONY: check-type
+check-type:
+	$(TYPE_CHECK) $(DEMO)
 
 .PHONY: check-style
 check-style:
-	flake8 .
-
-.PHONY: fix-style
-fix-style:
-	autopep8 --in-place --recursive --aggressive --aggressive .
+	$(STYLE_CHECK) $(DEMO)
 
 .PHONY: run-test
 run-test:
-ifeq ($(shell which pytest), ) # if pytest not found
-	@echo "pytest not found. Installing..."
-	pip install pytest
-endif
-	pytest --verbose --color=yes tests/
-	@echo "All unittests passed!"
+	$(TEST) $(TEST_ARGS) $(DEMO)/tests
 
 .PHONY: run-test-coverage
-run-test-coverage: create-doc-folder
-	pytest --verbose --color=yes --cov=. --cov-report=term-missing --cov-report=html:$(DOCS)/htmlcov tests/
-	@echo "All unittests passed!"
-
-.PHONY: check-types
-check-types:
-# use shell command which to check if mypy is installed and is in $PATH
-ifeq ($(shell which mypy), )
-	@echo "mypy not found. Installing mypy..."
-	pip install mypy
-endif
-	mypy --disallow-untyped-defs --strict .
-	@echo "Type checking done."
-
-.PHONY: create-doc-folder
-create-doc-folder:
-	@mkdir -p $(DOCS) # creates all folder(s) if not exists
-
-.PHONY: create-docs
-create-docs: create-doc-folder
-	pdoc --output-dir $(DOCS)/code-docs
-	@echo "html docs created and saved in $(DOCS)/code-docs"
-
-.PHONY: create-uml
-create-uml: create-doc-folder
-# use shell command which to check if java is installed and is in the $PATH
-ifeq ($(shell which java), )
-	$(error "No java found in $(PATH). Install java to run plantuml")
-endif
-# use wildcard function to check if file exists
-ifeq ($(wildcard ~/plantuml.jar), )
-	@echo "Downloading plantuml.jar in home folder..."
-	curl -L -o ~/plantuml.jar https://sourceforge.net/projects/plantuml/files/plantuml.jar/download
-	sudo apt install graphviz
-endif
-	@echo "Creating UML diagrams..."
-	@for umlfile in $(UMLFILES); do \
-		echo "Processing $$umlfile..."; \
-		$(PLANTUML) $$umlfile; \
-	done
-	@echo "UML diagrams created and saved in uml folder"
-
+run-test-coverage:
+	$(COVERAGE) -v --cov-report=term-missing --cov=$(DEMO) $(DEMO)/tests
 
 .PHONY: clean
 clean:
 	# remove all caches recursively
-	rm -rf `find . -type d -name __pycache__` # remove all pycache
-	rm -rf `find . -type d -name .pytest_cache` # remove all pytest cache
-	rm -rf `find . -type d -name .mypy_cache` # remove all mypy cache
-	rm -rf `find . -type d -name .hypothesis` # remove all hypothesis cache
-	rm -rf `find . -name .coverage` # remove all coverage cache
+	rm -rf `find . -type d -name __pycache__`
+	rm -rf `find . -type d -name .pytest_cache`
+	rm -rf `find . -type d -name .mypy_cache`
+	rm -rf `find . -type d -name .hypothesis`
+	rm -rf `find . -name .coverage`

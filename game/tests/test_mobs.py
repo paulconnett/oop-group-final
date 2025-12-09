@@ -1,6 +1,5 @@
 '''
 Unittesting Mob and Enemy class
-FIX - add test for damage <= 0
 
 ChatGPT Free model used to generate starting code:
 https://chatgpt.com/share/69381543-8f78-8001-91b7-e351e55957a9

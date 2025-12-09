@@ -21,4 +21,4 @@
 | Status      | complete                                                                      |
 | Location    | https://github.com/paulconnett/oop-group-final                                  |
 | Self Grade  | 104/100                                                                            |
-| Notes       |                                                                                 |
+| Notes       | To play game:<br>- Navigate to the root `oop-group-final/` folder<br>- The command `make play` will build the docker container and launch the game|

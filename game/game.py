@@ -29,9 +29,9 @@ class Game():
         self._monster_list: MonsterList = MonsterList()
 
         for i in range(Game.NUM_LEVELS):  # Build dungeon
-            shop = Shop(i+1, self.player)
+            shop = Shop(i + 1, self.player)
             self._rooms.append(shop)
-            dun = Dungeon(i+1, self.player, self._monster_list)
+            dun = Dungeon(i + 1, self.player, self._monster_list)
             self._rooms.append(dun)
 
     def play_game(self) -> None:
@@ -70,4 +70,4 @@ class Game():
 
 
 if __name__ == '__main__':
-    Game.main() # pragma: no cover
+    Game.main()  # pragma: no cover

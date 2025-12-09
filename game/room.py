@@ -19,6 +19,7 @@ class Room(ABC):
     '''
     Abstract base Room class
     '''
+
     def __init__(self, level: int, player: Player) -> None:
         '''
         constructor
@@ -114,8 +115,8 @@ class Shop(Room):
         item = input("\nBork: What's catching your eye? (Enter item number...) ")
 
         try:
-            item = int(item) - 1
-            choice = items[item]
+            item_num = int(item) - 1
+            choice = items[item_num]
         except (IndexError, ValueError):
             input("Invalid option!  (Press enter...)")
             self.buy_items(items)
@@ -164,6 +165,7 @@ class Dungeon(Room):
     '''
     dungeon class
     '''
+
     def __init__(self, level: int, player: Player, monster_list: MonsterList) -> None:
         '''
         constructor
@@ -258,10 +260,10 @@ class Dungeon(Room):
         choice = input(f"Which item will {player.name} use? (Enter item number...) ")
 
         try:
-            choice = int(choice) - 1
-            player.use_potion(potions[choice])
+            choice_num = int(choice) - 1
+            player.use_potion(potions[choice_num])
             os.system('clear')
-            print(f"{player.name} used a {potions[choice].name}")
+            print(f"{player.name} used a {potions[choice_num].name}")
         except (IndexError, ValueError):
             print("INVALID INPUT")
             self.use_potion(player)

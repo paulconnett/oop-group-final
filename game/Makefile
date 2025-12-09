@@ -4,7 +4,7 @@ UMLDIR = ./uml
 UMLFILES = $(wildcard $(UMLDIR)/*.$(UMLEXT))
 DOCS = docs
 
-all: check-style check_types run-test run-test-coverage create-docs create-uml clean
+all: check-style check-types run-test run-test-coverage create-docs create-uml clean
 	@echo "Make all done...!"
 
 .PHONY: all

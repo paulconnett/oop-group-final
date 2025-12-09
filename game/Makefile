@@ -71,6 +71,10 @@ endif
 	done
 	@echo "UML diagrams created and saved in uml folder"
 
+.PHONY: play
+play:
+	docker build -t game .
+	docker run -it game
 
 .PHONY: clean
 clean:

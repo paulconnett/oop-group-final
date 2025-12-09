@@ -22,10 +22,10 @@ class TestShop(unittest.TestCase):
         self.shop = Shop(level=1, player=self.player)
 
     def testlevel_property(self) -> None:
-    """
-    Tests level properity
-    """
-    self.assertEqual(self.shop.level, 1)
+        """
+        Tests level properity
+        """
+        self.assertEqual(self.shop.level, 1)
 
     @patch.object(Shop, "buy_items")
     @patch("builtins.input")

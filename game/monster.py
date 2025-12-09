@@ -1,6 +1,9 @@
 '''
 MonsterList class
 '''
+
+__author__ = "Paul Connett", "Parker Stacy"
+
 from typing import List
 from enemy import Enemy
 

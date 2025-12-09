@@ -49,7 +49,7 @@ create-doc-folder:
 
 .PHONY: create-docs
 create-docs: create-doc-folder
-	pdoc --output-dir $(DOCS)/code-docs game.py room.py mob.py player.py enemy.py item.py
+	pdoc --force --output-dir $(DOCS)/code-docs game.py room.py mob.py player.py enemy.py item.py
 	@echo "html docs created and saved in $(DOCS)/code-docs"
 
 .PHONY: create-uml

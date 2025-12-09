@@ -14,27 +14,21 @@ class TestGame(unittest.TestCase):
     """
     Unittesting Game class
     """
-
-    def setUp(self) -> None:
-        """
-        Setup method - creates a Game object every time a test is run
-        """
-        self.game = Game()
-
-    @patch("builtins.input", return_value="")
+    @patch("builtins.input", return_value="Player")
     def test_play_game(self, _mock_input) -> None:
         """
         Tests that play_game calls play_room
         """
+        game = Game()
         test_room = MagicMock()
-        self.game._rooms = [test_room]
+        game._rooms = [test_room]
+        game.play_game()
 
-        self.game.play_game()
-
-        test_room.play_room.assert_called_once_with(self.game.player)
+        test_room.play_room.assert_called_once_with(game.player)
 
     @patch.object(Game, "play_game")
-    def test_main(self, mock_play_game) -> None:
+    @patch("builtins.input", return_value="Player")
+    def test_main(self, _mock_input: MagicMock, mock_play_game: MagicMock,) -> None:
         """
         Tests main static method creates a Game instance and calls play_game()
         """

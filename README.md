@@ -15,10 +15,10 @@
 
 | Name        | Value                                                                           |
 | :---------- | :------------------------------------------------------------------------------ |
-| Name        | Elevator program                                                                |
+| Name        | Dungeon Game                                                                    |
 | Description | Final group project for CSCI375 and Student Showcase                            |
 | Due Date    | 9-Dec-2025                                                                      |
-| Status      | incomplete                                                                      |
+| Status      | complete                                                                      |
 | Location    | https://github.com/paulconnett/oop-group-final                                  |
-| Self Grade  | /100                                                                            |
+| Self Grade  | 104/100                                                                            |
 | Notes       |                                                                                 |
